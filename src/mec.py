@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os,sys
 import pysam
@@ -56,7 +56,8 @@ def output_contig(seq,dic_interval,contigid,outfile):
     split_num = 0
     
     for cid in contigid:
-        if len(dic_interval[cid])<1:print cid
+        if len(dic_interval[cid])<1:
+            print (cid)
         assert len(dic_interval[cid])>=1
         if len(dic_interval[cid])==1:
             p0=dic_interval[cid][0][0]
@@ -89,7 +90,7 @@ def main():
     parser.add_argument('-g', metavar ='gamma', type=float, default=0.2, help='One parameter for determining high or low GC content. Default value: 0.2.')
     args = parser.parse_args()
 
-    print "start parse contig file"
+    print ("start parse contig file")
     seq = parse_contig(args.i)
 
     bamfile = args.bam
@@ -101,7 +102,7 @@ def main():
     GCavgRate = GCRate/len(seq)
     interval = pb.get_all_interval(samfile,args.m,args.s,args.q,args.a,args.b,args.g,seq,GCavgRate)
 
-    print "output all the intervals for each contig"
+    print ("output all the intervals for each contig")
     interval_file01 = "./intervals.txt"
     f01 = open(interval_file01,"w")
     for cid in contigid:
@@ -110,11 +111,11 @@ def main():
             f01.write(str(item[0])+" "+str(item[1])+"\n")
     f01.close()
  
-    print "output contig file"
+    print ("output contig file")
     split_num = output_contig(seq,interval,contigid,args.o)
     
-    print "split_num",split_num
-    print "\n"
+    print ("split_num",split_num)
+    print ("\n")
     
 if __name__ == "__main__":
     main()
