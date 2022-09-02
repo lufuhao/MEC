@@ -63,7 +63,7 @@ samtools index contigs_short.sort.bam
 ### Correcting the misassemblies with MEC
 
 ```bash
-#Please go to the directory "src". Run command line:  
+#Please go to the directory "src". Run command line:
 python mec.py -bam contigs_short.sort.bam -i assembly.fasta -o correct_assembly.fasta [options] 
 ```
 > [options]
@@ -80,7 +80,27 @@ python mec.py -bam contigs_short.sort.bam -i assembly.fasta -o correct_assembly.
 
 ## Example:
 
-	There is an example of command lines with MEC to correct misassemblies shown in "run.sh".
+```bash
+#cut the first 100 base for each read; no idea why
+python cut_reads.py reads_1.trimmed.fastq reads_2.trimmed.fastq reads_1.trimmed_cut.fastq reads_2.trimmed_cut.fastq
+
+#Rename each seqID to a number (,1,2,3 ... etc); no idea why
+awk 'BEGIN{id=1}{if($0~/>/){printf(">%d\n",id);id++}else{print $0}}' input_contigs.fa > contigs.fa
+
+# Mapping the paired-end reads to the contigs using Bowtie2
+bowtie2-build contigs.fa contigs
+bowtie2 -x contigs -1 reads_1.trimmed_cut.fastq -2 reads_2.trimmed_cut.fastq -S | samtools view -b -h -S - > contigs_short.bam
+samtools sort -o contigs_short.sort.bam contigs_short.bam 
+samtools index contigs_short.sort.bam
+
+
+#Deleting the unneccessary files
+rm -rf *.bt2
+rm contigs_short.bam
+
+#Using MEC to detect and correct the misassemblies
+python mec.py -bam contigs_short.sort.bam -a 0.4 -b 0.5 -m 600 -s 100 -i contigs.fa -o contigs-corr.fa
+```
 
 ## Output:
 
