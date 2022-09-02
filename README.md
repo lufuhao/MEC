@@ -33,7 +33,7 @@ CHINA, 410083
 
 ## Requirements
 
-- [x] Python3: Cython, pysam
+- [x] Python3: Cython, pysam, collections, numpy
 - [x] bowtie2
 - [x] samtools
 

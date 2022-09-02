@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 
 import os,sys
+import gzip
+import binascii
 
 def is_gz_file(filepath):
     with open(filepath, 'rb') as test_f:

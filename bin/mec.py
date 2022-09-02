@@ -41,11 +41,11 @@ def MAD(frq):
     """
 
     all_lengths = []
-    for k, v in frq.iteritems():
+    for k, v in frq.items():
         new_vals = [k] * int(v)
         all_lengths.extend(new_vals)
     all_lengths = np.array(sorted(all_lengths))
-    mid = len(all_lengths)/2
+    mid = int(len(all_lengths)/2)
     median = all_lengths[mid]
     residuals = sorted(abs(all_lengths - median)) # difference between val and median
     MAD = residuals[mid] # median of residuals
@@ -98,28 +98,28 @@ def get_valid_interval(cid,length,reads,mu,sigma,minq,alpha,beta,gamma,seq,GCavg
                     if mu<1000:
                         if read.is_proper_pair and read.next_reference_start < read.reference_start:
                             if read.next_reference_start+read.rlen < read.reference_start:
-                                for i in xrange(read.next_reference_start+read.rlen,read.reference_start):
+                                for i in range(read.next_reference_start+read.rlen,read.reference_start):
                                     frag_coverage[i]+=1
                             else:
-                                for i in xrange(read.next_reference_start,read.reference_end):
+                                for i in range(read.next_reference_start,read.reference_end):
                                     frag_coverage[i]+=1
                                     
                     else:
                         if mu-3*sigma<= abs(read.isize) <= mu+3*sigma and read.next_reference_start < read.reference_start:
                             if read.next_reference_start+read.rlen < read.reference_start:
-                                for i in xrange(read.next_reference_start+read.rlen,read.reference_start):
+                                for i in range(read.next_reference_start+read.rlen,read.reference_start):
                                     frag_coverage[i]+=1
                             else:
-                                for i in xrange(read.next_reference_start,read.reference_end):
+                                for i in range(read.next_reference_start,read.reference_end):
                                     frag_coverage[i]+=1
                 else:
                     if mu<1000:
                         if read.is_proper_pair and read.next_reference_start < read.reference_start:
-                            for i in xrange(read.next_reference_start,read.reference_end):
+                            for i in range(read.next_reference_start,read.reference_end):
                                 frag_coverage[i]+=1
                     else:
                         if mu-3*sigma<= abs(read.isize) <= mu+3*sigma and read.next_reference_start < read.reference_start:
-                            for i in xrange(read.next_reference_start,read.reference_end):
+                            for i in range(read.next_reference_start,read.reference_end):
                                 frag_coverage[i]+=1
             else:
                 if read.is_reverse:
@@ -128,19 +128,19 @@ def get_valid_interval(cid,length,reads,mu,sigma,minq,alpha,beta,gamma,seq,GCavg
                     left_discordant.append((read.reference_name,read.reference_start,read.reference_end,read.next_reference_name,read.pnext,read.isize))
                                  
     frag_threshold = sum(frag_coverage)*1.0/length
-    frag_pos = [i for i in xrange(length) if frag_coverage[i]>alpha*frag_threshold]
+    frag_pos = [i for i in range(length) if frag_coverage[i]>alpha*frag_threshold]
     frag_interval = pos_to_interval(frag_pos,100)
 
     interval = []
     if len(frag_interval)>=2:
         interval_len = len(frag_interval)
         p0 = 0
-        for i in xrange(interval_len):
+        for i in range(interval_len):
             if i==interval_len-1:
                 p1 = length-1
                 interval.append((p0,p1))
             else:
-                error_pos = [frag_coverage[j] for j in xrange(frag_interval[i][1]+1,frag_interval[i+1][0])]
+                error_pos = [frag_coverage[j] for j in range(frag_interval[i][1]+1,frag_interval[i+1][0])]
                 break_pos01 = error_pos.index(min(error_pos))
                 p1 = frag_interval[i][1]+break_pos01
                 interval.append((p0,p1))
@@ -159,7 +159,7 @@ def get_valid_interval(cid,length,reads,mu,sigma,minq,alpha,beta,gamma,seq,GCavg
         p0 = interval[0][0]
         p1 = interval[0][1]
         interval_len = len(interval)
-        for i in xrange(interval_len-1):
+        for i in range(interval_len-1):
 
             before_ctg =  []
             after_ctg = []
@@ -221,7 +221,7 @@ def get_valid_interval(cid,length,reads,mu,sigma,minq,alpha,beta,gamma,seq,GCavg
         interval_len = len(interval_valid)
         p0 = interval_valid[0][0]
         p1 = interval_valid[0][1]
-        for i in xrange(interval_len-1):
+        for i in range(interval_len-1):
             start = max(interval_valid[i][1]-mu/2,0)
             end = min(interval_valid[i+1][0]+mu/2,length-1)
 
