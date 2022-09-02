@@ -42,7 +42,6 @@ CHINA, 410083
 ### Mapping the paired-end reads to the contigs
 
 ```bash
-#
 #Inverting the head of the contig file before mapping with AWk
 awk 'BEGIN{id=1}{if($0~/>/){printf(">%d\n",id);id++}else{print $0}}' input_contigs.fa > contigs.fa
 
@@ -67,14 +66,23 @@ samtools index contigs_short.sort.bam
 python mec.py -bam contigs_short.sort.bam -i assembly.fasta -o correct_assembly.fasta [options] 
 ```
 > [options]
+
 >    -i <input_assembly.fasta> Mandatory parameter. The input assembly fasta file.
+
 >    -o <output_correct_assembly.fasta> Mandatory parameter. The output corrected fasta file.
+
 >    -bam <the index bam file> Mandatory parameter. The index bam file for alignment. 
+
 >    -q <minimum mapping quality> Optional parameter. The minimum value of mapping quality. Default value: 40.
+
 >    -m <mu> Optional parameter. The mean of the paired-end reads' insert size. Default value: 0.
+
 >    -s <sigma> Optional parameter. The variance of the paired-end reads' insert size. Default value: 0.
+
 >    -a <alpha> Optional parameter. The percentage of the average of the fragment coverage. Default value: 0.4.
+
 >    -b <beta> Optional parameter. One cutoff for removing false misassemblies. Default value: 0.5.
+
 >    -g <gamma> Optional parameter. One parameter for determining high or low GC content. Default value: 0.2.
 
 
@@ -104,4 +112,4 @@ python mec.py -bam contigs_short.sort.bam -a 0.4 -b 0.5 -m 600 -s 100 -i contigs
 
 ## Output:
 
-	The final output file including the corrected fasta file and the correct interval for each contig ("intervals.txt").
+> The final output file including the corrected fasta file and the correct interval for each contig ("intervals.txt").
